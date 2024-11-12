@@ -390,3 +390,37 @@ class IdentificationService {
     return false;
   }
 }
+
+// import 'package:dio/dio.dart';
+
+// Future<void> generateContent(String prompt, String apiKey) async {
+//   final dio = Dio();
+//   final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey';
+
+//   final data = {
+//     "contents": [
+//       {
+//         "parts": [
+//           {"text": prompt}
+//         ]
+//       }
+//     ]
+//   };
+
+//   try {
+//     final response = await dio.post(
+//       url,
+//       options: Options(headers: {'Content-Type': 'application/json'}),
+//       data: data,
+//     );
+
+//     if (response.statusCode == 200) {
+//       print(response.data);
+//     } else {
+//       print('Request failed with status: ${response.statusCode}');
+//     }
+//   } catch (e) {
+//     print('Error occurred: $e');
+//   }
+// }
+
