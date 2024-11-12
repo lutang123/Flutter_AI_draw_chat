@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_ai_draw_it/chat_widget.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:url_launcher/link.dart';
 
@@ -24,21 +25,21 @@ class GenerativeAISample extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: const ChatScreen(title: 'Gemini Picture Game'),
+      home: const HomeScreen(title: 'Gemini Picture Game'),
     );
   }
 }
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key, required this.title});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   String? apiKey;
 
   @override
@@ -48,11 +49,25 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text(widget.title),
       ),
       body: switch (apiKey) {
-        final providedKey? => ChatWidget(apiKey: providedKey),
+        final providedKey? => DrawWidget(apiKey: providedKey),
         _ => ApiKeyWidget(onSubmitted: (key) {
             setState(() => apiKey = key);
           }),
       },
+      floatingActionButton: apiKey != null
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatWidget(apiKey: apiKey!),
+                  ),
+                );
+              },
+              tooltip: 'Go to Chat Screen',
+              child: const Icon(Icons.chat_bubble),
+            )
+          : null,
     );
   }
 }
@@ -117,16 +132,16 @@ class ApiKeyWidget extends StatelessWidget {
   }
 }
 
-class ChatWidget extends StatefulWidget {
-  const ChatWidget({required this.apiKey, super.key});
+class DrawWidget extends StatefulWidget {
+  const DrawWidget({required this.apiKey, super.key});
 
   final String apiKey;
 
   @override
-  State<ChatWidget> createState() => _ChatWidgetState();
+  State<DrawWidget> createState() => _DrawWidgetState();
 }
 
-class _ChatWidgetState extends State<ChatWidget> {
+class _DrawWidgetState extends State<DrawWidget> {
   final dots = <Offset>[];
   final paintKey = GlobalKey();
   late final IdentificationService _service;
